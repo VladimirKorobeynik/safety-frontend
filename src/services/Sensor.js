@@ -1,7 +1,7 @@
 import Api from "./Api";
 
 export default {
-    async getUserSensors(user_id, searchString) {
+    getUserSensors(user_id, searchString) {
         let config = {
             params: {
                 'searchString': searchString
@@ -10,7 +10,10 @@ export default {
 
         return Api.get('/getUserSensors/' + user_id, config);
     },
-    async activateDeviceSensors(deviceAndSensorObj) {
+    activateDeviceSensors(deviceAndSensorObj) {
         return Api.put('/activateUserSensor', deviceAndSensorObj);
     },
+    getSensorTypes() {
+        return Api.get('/getSensorsType');
+    }
 }

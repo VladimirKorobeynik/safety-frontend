@@ -1,7 +1,7 @@
 import Api from "./Api";
 
 export default {
-    async getAllDevices(searchString) {
+    getAllDevices(searchString) {
         let config = {
             params: {
                 'searchString': searchString
@@ -10,19 +10,19 @@ export default {
 
         return Api.get('/getAllSmartDevices', config);
     },
-    async createDevice(deviceObj) {
+    createDevice(deviceObj) {
         return Api.post('/createSmartDevice', deviceObj);
     },
-    async deleteDevice(deleteDevice) {
+    deleteDevice(deleteDevice) {
         return Api.delete('/deleteSmartDevice/' + deleteDevice);
     },
-    async exportDevices() {
+    exportDevices() {
         let config = {
             responseType: 'blob'
         }
         return Api.get('/exportDevices', config);
     },
-    async importDevices(formData) {
+    importDevices(formData) {
         let config = {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -30,7 +30,10 @@ export default {
         }
         return Api.post('/importDevices', formData, config);
     },
-    async activateDeviceAndSensor(activateDeviceObj) {
+    activateDeviceAndSensor(activateDeviceObj) {
         return Api.put('/activateSmartDevice', activateDeviceObj);
+    },
+    updateSmartDeviceSensorName(deviceObj) {
+        return Api.put('/updateSmartDeviceSensorName', deviceObj);
     }
 }

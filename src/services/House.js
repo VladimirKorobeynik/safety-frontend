@@ -1,7 +1,7 @@
 import Api from "./Api";
 
 export default {
-    async getHousesWithStatistics(user_id, searchString) {
+    getHousesWithStatistics(user_id, searchString) {
         let config = {
             params: {
                 'searchString': searchString
@@ -10,7 +10,7 @@ export default {
 
         return Api.get('/getUserHousesWithStatistics/' + user_id, config);
     },
-    async getAllHouse(searchString) {
+    getAllHouse(searchString) {
         let config = {
             params: {
                 'searchString': searchString
@@ -19,25 +19,25 @@ export default {
 
         return Api.get('/allHouses', config);
     },
-    async exportHouses() {
+    exportHouses() {
         let config = {
             responseType: 'blob'
         }
         return Api.get('/exportHouses', config);
     },
-    async createHouse(houseObj) {
+    createHouse(houseObj) {
         return Api.post('/createHouse', houseObj);
     },
-    async updateHouse(house_id, houseObj) {
+    updateHouse(house_id, houseObj) {
         return Api.put('/updateHouse/' + house_id, houseObj);
     },
-    async deleteHouse(house_id) {
+    deleteHouse(house_id) {
         return Api.delete('/deleteHouse/' + house_id);
     },
-    async bindSmartDeviceToHouse(bindObj) {
+    bindSmartDeviceToHouse(bindObj) {
         return Api.put('/bindSmartDeviceToHouse/', bindObj);
     },
-    async getOperatorResponsibilityHouses(operator_id) {
+    getOperatorResponsibilityHouses(operator_id) {
         return Api.get('/getOperatorResponsibilityHouses/' + operator_id);
     },
 }

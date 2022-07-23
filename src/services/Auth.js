@@ -1,13 +1,13 @@
 import Api from "./Api";
 
 export default {
-    async signIn(credentialsObj) {
+    signIn(credentialsObj) {
         return Api.post('/signIn', credentialsObj);
     },
-    async signUp(registerObj) {
+    signUp(registerObj) {
         return Api.post('/signUp', registerObj);
     },
-    async logOut() {
+    logOut() {
         return Api.post('/logout');
     }
 }

@@ -130,5 +130,8 @@
     "importExcel": "Import Excel",
     "import": "Import",
     "importDevices": "Import Devices",
-    "xlsxFile": "File xlsx"
+    "xlsxFile": "File xlsx",
+    "notNotification": "You have no notifications yet",
+    "settingsSamrtDevice": "Settings smart device",
+    "sensors": "Sensors"
 }

@@ -20,7 +20,6 @@
 
 <script>
 import User from "@/services/User";
-import Auth from "@/services/Auth";
 import SidebarComponent from "@/components/dashboard-page/sidebar/SidebarComponent.vue";
 import ContentComponent from "@/components/dashboard-page/content/ContentComponent.vue";
 
@@ -31,10 +30,13 @@ export default {
   },
   data() {
     return {
-      userObj: this.getUserData(),
+      userObj: {},
       selectedMenuItem: 0,
       selectedMenuItemText: "",
     };
+  },
+  created() {
+    this.getUserData();
   },
   methods: {
     getUserData() {
@@ -58,7 +60,6 @@ export default {
       this.selectedMenuItemText = itemMenuText;
     },
   },
-  mounted() {},
 };
 </script>
 

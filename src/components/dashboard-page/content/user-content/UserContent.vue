@@ -495,6 +495,54 @@
         <h3>My footer</h3>
       </template>
     </app-modal>
+    <app-modal
+      class="activateDeviceModal"
+      v-if="this.showSettingDeviceModal"
+      @close="this.showSettingDeviceModal = false"
+      @approve="saveSettingDevice"
+      :btnText="$t('save')"
+    >
+      <template #header>
+        <h3 style="margin: 0">{{ $t("settingsSamrtDevice") }}</h3>
+      </template>
+      <template #body>
+        <div class="create-house-form-block">
+          <div class="activate-device">
+            <div class="input-wrap">
+              <label for="deviceNumber">{{ $t("activateDeviceNumber") }}</label>
+              <input
+                type="text"
+                id="deviceNumber"
+                v-model="this.settingDevice.smart_device_id"
+                readonly
+              />
+            </div>
+            <div class="input-wrap">
+              <label for="">{{ $t("sensors") }}</label>
+            </div>
+            <div class="device-sensors-name">
+              <div
+                class="input-wrap"
+                v-for="(sensor, index) in this.settingDevice.sensors"
+                :key="sensor"
+              >
+                <label for="deviceNumber">{{
+                  this.getSensorType(sensor.sensor_id) + " Sesnor name"
+                }}</label>
+                <input
+                  type="text"
+                  id="deviceNumber"
+                  v-model="this.settingDevice.sensors[index].name"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template #footer>
+        <h3>My footer</h3>
+      </template>
+    </app-modal>
     <div class="devices-control-panel">
       <div class="search-block">
         <input
@@ -561,6 +609,13 @@
             </div>
           </div>
         </div>
+        <div class="setting-block">
+          <img
+            src="@/assets/setting-icon.svg"
+            @click="openSettingDeviceModal(sensor)"
+            alt=""
+          />
+        </div>
         <div class="label-block"></div>
       </div>
     </div>
@@ -606,7 +661,7 @@ export default {
       },
       //Houses
       searchString: "",
-      userHouses: this.getHousesWithStatistics(),
+      userHouses: [],
       showCreateHouseModal: false,
       showUpdateHouseModal: false,
       showBindSmartDevModal: false,
@@ -628,14 +683,19 @@ export default {
         count_doors: 0,
       },
       //Sensors
-      userSensor: this.getUserSensors(),
+      userSensor: [],
       showCreateDeviceModal: false,
+      showSettingDeviceModal: false,
       searchStringSensors: "",
       unBindedSmartDevice: [],
       smartDeviceToBind: "",
       houseToBind: "",
       activatedDeviceSuccessfully: false,
       btnLoader: false,
+      settingDevice: {
+        smart_device_id: "",
+        sensors: [],
+      },
       activateDeviceObj: {
         user_id: this.userObj.user_id,
         smart_device_number: "",
@@ -644,7 +704,13 @@ export default {
         smart_device_id: "",
         activation_key: "",
       },
+      sensorsType: [],
     };
+  },
+  mounted() {
+    this.getHousesWithStatistics();
+    this.getUserSensors();
+    this.getSensorTypes();
   },
   methods: {
     updateUserData() {
@@ -808,6 +874,42 @@ export default {
           alert(response.data.message);
         }
       });
+    },
+    openSettingDeviceModal(device) {
+      this.showSettingDeviceModal = true;
+      this.settingDevice.smart_device_id = device.smart_device_id;
+      this.settingDevice.sensors = device.sensors;
+    },
+    saveSettingDevice() {
+      Device.updateSmartDeviceSensorName(this.settingDevice).then(
+        (response) => {
+          if (response.data.status == "Success") {
+            this.showSettingDeviceModal = false;
+            this.getUserSensors();
+          } else {
+            alert(response.data.message);
+          }
+        }
+      );
+    },
+    getSensorTypes() {
+      Sensor.getSensorTypes().then((response) => {
+        if (response.data.status == "Success") {
+          this.sensorsType = response.data.data;
+          console.log(this.sensorsType);
+        } else {
+          alert(response.data.message);
+        }
+      });
+    },
+    getSensorType(sensor_id) {
+      let type = "";
+      this.sensorsType.forEach((element) => {
+        if (sensor_id == element.sensor_id) {
+          type = element.type;
+        }
+      });
+      return type;
     },
   },
 };
@@ -1228,6 +1330,13 @@ export default {
           }
         }
       }
+      .setting-block {
+        margin-right: 10px;
+        img {
+          width: 35px;
+          cursor: pointer;
+        }
+      }
       .label-block {
         position: absolute;
         right: 0;
@@ -1271,6 +1380,10 @@ export default {
       outline: none;
       font-size: 15px;
     }
+  }
+  .device-sensors-name {
+    height: 200px;
+    overflow-y: scroll;
   }
 }
 .activateDeviceModal {
